@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun  8 14:23:00 2021
+This script combines together all Excel files in a directory into one CSV output file.
 
-@author: Ash
+Initially created on Tue Jun  8 14:23:00 2021 by @author: uh-sheesh.
 """
 
 import glob
@@ -13,11 +13,11 @@ import getopt
 from pathlib import Path
 from datetime import datetime
 
-def divider():
-    print('-------------------------')
-
 def usage():
     print('To use this program, please follow this example: \'python stitcher.py output\', where output refers to the desired filename. This file will be created in an \'output\' folder in the current directory.')
+
+def divider():
+    print('-------------------------')
 
 def main(output_name):
     try:
