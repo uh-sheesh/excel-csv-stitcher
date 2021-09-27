@@ -19,6 +19,11 @@ def usage():
 def divider():
     print('-------------------------')
 
+def printer(df, sheet_name):
+    #add the location of the filename for the sheet
+    df['Filename'] = sheet_name
+    print(sheet_name + ' inlcuded.')
+
 def main(output_name):
     try:
 
@@ -29,21 +34,32 @@ def main(output_name):
         #initialize the dataframe
         df = pd.DataFrame()
         
-        #saves fields that match the format to a list
-        files = glob.glob('*.xlsx')
         
-        #prints the items that match
+        #save item to a folder        
+        cwd = os.getcwd()    
+        
+        #saves all the files in the current directoy as a list
+        files = os.listdir(cwd) 
+        
+        #prints a divder
         divider()
-        print('Files inlcuded: ' + ', '.join(files))
         
         #verify that each item ends in the appropriate format, read the item and then append it to the dataframe 
         for item in files:
-              if item.endswith('.xlsx'):
-                  df = df.append(pd.read_excel(item, index_col=[0]), ignore_index=True)
-        
-        #save item to a folder        
-        cwd = os.getcwd()      
-
+            
+            #create (or recreate) a temporary dataframe to store the new sheet
+            temp_df = pd.DataFrame(columns=['Filename'])
+            
+            if item.endswith('.xlsx'):
+                temp_df = temp_df.append(pd.read_excel(item, index_col=[0]), ignore_index=True)
+                printer(temp_df, item)
+                df = df.append(temp_df)
+                
+            elif item.endswith('.csv'):
+                temp_df = temp_df.append(pd.read_csv(item, index_col=[0]), ignore_index=True)
+                printer(temp_df, item)
+                df = df.append(temp_df)  
+            
         # get current date and time for the name of the output file
         now = datetime.now()
         current_date = now.strftime("%m-%d-%y")
